@@ -20,7 +20,7 @@ class BookUser(models.Model):
         BASIC: "Basic",
         PREMIUM: "Premium",
     }
-    BookUserGroup = models.PositiveSmallIntegerField(help_text="Your subscription plan" verbose_name="Subscription plan",
+    BookUserGroup = models.PositiveSmallIntegerField(help_text="Your subscription plan", verbose_name="Subscription plan",
                                      blank=False, default=FREE, choices=GROUP_CHOICES)
 
     # Expiration date of subscription
