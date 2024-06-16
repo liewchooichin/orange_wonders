@@ -6,10 +6,10 @@ class BookUser(models.Model):
     BookUserId = models.SmallAutoField(primary_key=True)
     # Name must have a value
     BookUserName = models.CharField(max_length=64, help_text="Your username", verbose_name="Username",
-                                    blank=False)
+                                    blank=False, unique=True)
     # Email can be blank and default null=NULL
     BookUserEmail = models.EmailField(max_length=64, help_text="Your username", verbose_name="Email",
-                                    blank=True, null=True)
+                                    blank=True, null=True, unique=False)
     
     # User subscription group
     FREE = 0
