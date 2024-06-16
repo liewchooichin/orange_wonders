@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # add the book_catalog app
     'book_catalog.apps.BookCatalogConfig',
+    'book_user.apps.BookUserConfig',
 ]
 
 MIDDLEWARE = [
