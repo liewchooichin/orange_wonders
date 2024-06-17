@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date
+#from ..book_catalog import BookInstance
 
 # Create your models here.
 class BookUser(models.Model):
@@ -29,6 +30,16 @@ class BookUser(models.Model):
     BookUserValidityDate = models.DateField(help_text="Subscription is valid till this date", verbose_name="Expiration date",
                                             blank=False, default=FREE_GROUP_VALIDITY)
     
+    # One-to-many relationship
+    # One user can borrow many books.
+    # A user can have no books borrowed.
+    # A book can have no borrowers.
+    """
+    BookUserLoan = models.ManyToManyField(BookInstance, 
+                                     verbose_name="Number of books borrowed",
+                                     blank=True, null=True)
+    """
+
     # Metadata class
     class Meta:
         ordering = ["BookUserGroup"]
