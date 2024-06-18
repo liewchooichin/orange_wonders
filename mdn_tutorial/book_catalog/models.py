@@ -99,12 +99,12 @@ class BookInstance(models.Model):
     imprint = models.CharField(max_length=200)
     due_back = models.DateField(null=True, blank=True)
 
-    LOAN_STATUS = (
+    LOAN_STATUS = dict({
         ('m', 'Maintenance'),
         ('o', 'On loan'),
         ('a', 'Available'),
         ('r', 'Reserved'),
-    )
+    })
 
     status = models.CharField(
         max_length=1,
@@ -115,11 +115,28 @@ class BookInstance(models.Model):
     )
 
     class Meta:
-        ordering = ['due_back']
+        ordering = ['-due_back']
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.id} ({self.book.title})'
+        return f"{self.book.title} ({self.id})"
+    
+    def display_title(self):
+        """Display title of the book"""
+        result = f"{self.book.title}"
+        return result
+    display_title.short_description = "Title of a book"
+
+    def display_status(self):
+        """Display status of each book instance"""
+        result = f"{self.LOAN_STATUS.get(self.status)}\n"
+        return result
+    display_status.short_description = "Status of the book"
+
+    def display_due_back(self):
+        result = f"{self.due_back}"
+        return result
+    display_status.short_description = "Due back on this date"
 
 # Author model
 class Author(models.Model):
