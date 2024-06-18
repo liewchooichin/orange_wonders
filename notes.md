@@ -60,3 +60,46 @@ FROM book_catalog_book;
 
 ```
 
+## Base template
+
+Base template can look like this:
+
+```
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block title %}
+      <title>Local Library</title>
+    {% endblock %}
+  </head>
+  <body>
+    {% block sidebar %}
+      <!-- insert default navigation text for every page -->
+    {% endblock %}
+    {% block content %}
+      <!-- default content text (typically empty) -->
+    {% endblock %}
+  </body>
+</html>
+```
+
+Other templates that `extends` from the base template:
+
+```
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Local Library Home</h1>
+  <p>
+    Welcome to LocalLibrary, a website developed by
+    <em>Mozilla Developer Network</em>!
+  </p>
+{% endblock %}
+```
+
+## Template variables and template tags (functions)
+
+- Variables are enclosed in double braces ({{ num_books }}),
+    - The variables are from render()--context=context.
+    
+- Tags are enclosed in single braces with percentage signs ({% extends "base_generic.html" %}).
