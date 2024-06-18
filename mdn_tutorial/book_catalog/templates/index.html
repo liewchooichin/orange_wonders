@@ -1,0 +1,24 @@
+<!--Template tags functions-->
+{% extends "base_generic.html" %}
+
+  {% block title %}
+  <title>{{ title_of_page }}</title>
+  <h1>{{ title_of_page }}</h1>
+  {% endblock %}
+
+  <p>
+    Welcome to LocalLibrary, a website developed by
+    <em>Mozilla Developer Network</em>!
+  </p>
+
+  {% block content %}
+  <h2>Dynamic content</h2>
+  <p>The library has the following record counts:</p>
+  <ul>
+    <!--Template variables placeholders-->
+    <li><strong>Books:</strong> {{ num_books }}</li>
+    <li><strong>Copies:</strong> {{ num_instances }}</li>
+    <li><strong>Copies available:</strong> {{ num_instances_available }}</li>
+    <li><strong>Authors:</strong> {{ num_authors }}</li>
+  </ul>
+{% endblock %}

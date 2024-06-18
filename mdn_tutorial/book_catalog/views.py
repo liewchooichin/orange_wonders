@@ -20,6 +20,7 @@ def index(request):
         'num_instances': num_instances,
         'num_instances_available': num_instances_available,
         'num_authors': num_authors,
+        'title_of_page': "Local Library at The End of the River",
     }
 
     # Render the HTML template index.html with the data in the context variable
