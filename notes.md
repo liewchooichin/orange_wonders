@@ -41,3 +41,22 @@ git branch --set-upstream-to=origin/main main
 The Python interpreter is:
 `/usr/bin/python3`
 
+## DB problem
+
+If database models has some problems, use DW Browser to export the sql file. Then import the data back in accordingly.
+
+For bulk insert: 
+
+```
+INSERT INTO target [(field1[, field2[, …]])] 
+    [IN externaldatabase] 
+    SELECT [source.]field1[, field2[, …] 
+    FROM tableexpression
+
+-- Example:
+INSERT INTO "book_catalog_bookinstance" ("imprint","due_back", "status", "book_id")
+SELECT "Everday Classic", "2024-06-01", "a", book_catalog_book.id
+FROM book_catalog_book;
+
+```
+

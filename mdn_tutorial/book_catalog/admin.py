@@ -16,11 +16,14 @@ admin.site.register(Language)
 # Inline Book detail to the AuthorAdmin
 class BookInline(admin.TabularInline):
     model = Book
+    # To NOT list the three extra rows
+    extra = 0
 
 # Define the admin class
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ('last_name', 'first_name', 'date_of_birth', 'date_of_death')
-    list_filter = ('last_name')
+    # filter must be a list or a tuple
+    list_filter = ['last_name']
     fields = ['first_name', 'last_name', ('date_of_birth', 'date_of_death')]
     # To exclude a field:
     #exclude = ['date_of_birth']
@@ -45,7 +48,8 @@ class BooksInstanceInline(admin.TabularInline):
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'display_genre')
-    list_filter = ('author')
+    # the list must be a list or a tuple
+    list_filter = ['author']
     inlines = [BooksInstanceInline]
 
 # Register the Admin classes for BookInstance using the decorator
