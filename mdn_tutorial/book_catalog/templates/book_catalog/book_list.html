@@ -1,0 +1,29 @@
+{% extends "base_generic.html" %}
+
+{% comment %}
+{% block title %}
+    <title>Book list</title>
+    <h1>{{ title }}</h1>
+{% endblock %}
+{% endcomment %}
+
+
+{% block content %}
+  <h1>Book List</h1>
+  {% if book_list %}
+    <ul>
+      {% for book in book_list %}
+      <li>
+        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+        ({{book.author}})
+        {# Test for the last item #}
+        {% if forloop.last %}
+          -- The End of the book list --
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no books in the library.</p>
+  {% endif %}
+{% endblock %}

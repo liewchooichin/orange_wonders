@@ -43,10 +43,13 @@ class Book(models.Model):
     # deleted, this book would be deleted too! 
     title = models.CharField(max_length=200, help_text="Title of the book")
     author = models.ForeignKey('Author', on_delete=models.RESTRICT, null=True)
+    
+    class Meta:
+        ordering = ['title']
+
     # Foreign Key used because book can only have one author, but authors can have multiple books.
     # In practice a book might have multiple authors, but not in this implementation.
     # Author as a string rather than object because it hasn't been declared yet in file.
-
     summary = models.TextField(
         max_length=1000, help_text="Enter a brief description of the book")
     
@@ -148,7 +151,7 @@ class Author(models.Model):
     date_of_death = models.DateField('Died', null=True, blank=True)
 
     class Meta:
-        ordering = ['last_name', 'first_name']
+        ordering = ['first_name']
 
     def get_absolute_url(self):
         """Returns the URL to access a particular author instance."""
@@ -156,7 +159,7 @@ class Author(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.last_name}, {self.first_name}'
+        return f'{self.first_name} {self.last_name}'
 
 # Language model
 class Language(models.Model):
