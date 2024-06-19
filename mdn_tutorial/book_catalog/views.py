@@ -37,7 +37,6 @@ def index(request):
     import math
     name_prize = prizes[math.floor(random()*len(prizes))]
     request.session.get('name_prize', name_prize)
-    
 
     # Context information to return
     context = {
@@ -93,3 +92,43 @@ class AuthorDetailView(generic.DetailView):
         context['book_title'] = title
         return context
     """
+
+# When adding the functionality for users to view their borrowed books.
+# We'll use the same generic class-based list view we're familiar with, 
+# but this time we'll also import and derive from LoginRequiredMixin, so 
+# that only a logged in user can call this view. We will also choose to
+# declare a template_name.
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
+    """Generic class-based view listing books on loan to current user."""
+    model = BookInstance
+    template_name = 'book_catalog/borrowed_user.html'
+    paginate_by = 5
+
+    def get_queryset(self):
+        return (
+            BookInstance.objects.filter(borrower=self.request.user)
+            .filter(status__exact='o')
+            .order_by('due_back')
+        )
+
+# To write a librarian view to maintain return books
+from django.contrib.auth.mixins import PermissionRequiredMixin
+
+# Somehow the permission does not work
+#class LoanedBooksAllListView(PermissionRequiredMixin, generic.ListView):
+class LoanedBooksAllListView(LoginRequiredMixin, generic.ListView):
+    model = BookInstance    
+    template_name = "book_catalog/borrowed_librarian.html"
+    paginate_by = 5
+    #permission_required = ("book_catalog.can_mark_returned", "book_catalog.change_book")
+    #permission_required = "*"
+
+    def get_queryset(self) -> QuerySet[Any]:
+        query_1 = BookInstance.objects.filter(status__exact="o")
+        #query_2 = BookInstance.objects.filter(status__exact="m")
+        #query = query_1.union(query_2)
+        query = query_1.order_by("due_back")
+        
+        return query

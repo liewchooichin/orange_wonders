@@ -47,6 +47,9 @@ class BooksInstanceInline(admin.TabularInline):
 # Register the Admin classes for Book using the decorator
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
+    # Paginate for admin site
+    list_per_page = 10
+    
     list_display = ('title', 'author', 'display_genre')
     # the list must be a list or a tuple
     list_filter = ['author']
@@ -55,20 +58,23 @@ class BookAdmin(admin.ModelAdmin):
 # Register the Admin classes for BookInstance using the decorator
 @admin.register(BookInstance)
 class BookInstanceAdmin(admin.ModelAdmin):
+    # Paginate for admin site
+    list_per_page = 10
+    
     # This can list the display
-    list_display = ('display_title', 'display_status', 'display_due_back')
+    list_display = ('display_title', 'status', 'due_back', 'borrower')
     list_filter = ('status', 'due_back')
     # Using fieldsets to group the information:
-    """
+    
     fieldsets = (
         (None, {
             'fields': ('book', 'imprint')
         }),
         ('Availability', {
-            'fields': ('status', 'due_back')
+            'fields': ('status', 'due_back', 'borrower')
         }),
     )
-    """
+    
 
 
 

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,7 +33,10 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    # auth: core authenticaation framework
     'django.contrib.auth',
+    # contenttypes: # Django content type system 
+    # (allows permissions to be associated with models).
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -44,9 +48,11 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # Manages sessions across requests
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    # Associates users with requests using sessions.
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -54,10 +60,14 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'mdn_tutorial.urls'
 
+# After we have added the registration/accounts/ mapping in the urls.py,
+# we add the template search path.
+# To make the templates directory visible to the template loader we need
+# to add it in the template search path.
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,3 +135,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Using our own user login page.
+# Django expects that upon logging in you will want to be taken to a 
+# profile page, which may or may not be the case.
+# Now when you log in you should be redirected to the site homepage
+#  by default.
+# The homepage that we defined above is the book_catalog page.
+LOGIN_REDIRECT_URL = '/'

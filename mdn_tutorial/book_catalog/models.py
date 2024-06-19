@@ -1,5 +1,11 @@
 from django.db import models
 
+# Add the conf settings when adding in the users borrowing books function
+from django.conf import settings
+
+# To check whether a book is overdue.
+from datetime import date
+
 # Create your models here.
 
 from django.urls import reverse # Used in get_absolute_url() to get URL for specified ID
@@ -33,6 +39,7 @@ class Genre(models.Model):
                 violation_error_message = "Genre already exists (case insensitive match)"
             ),
         ]
+        ordering = ["name"]
 
 # Book class
 class Book(models.Model):
@@ -103,6 +110,11 @@ class BookInstance(models.Model):
     imprint = models.CharField(max_length=200)
     due_back = models.DateField(null=True, blank=True)
 
+    # Library users
+    # This maps to the default User model from django.contrib.auth.models. 
+    borrower = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                 on_delete=models.SET_NULL, null=True, blank=True)
+    
     LOAN_STATUS = [
         ('m', 'Maintenance'),
         ('o', 'On loan'),
@@ -120,11 +132,19 @@ class BookInstance(models.Model):
 
     class Meta:
         ordering = ['-due_back']
+        permissions = (("can_mark_returned", "Set book as returned"), )
 
     def __str__(self):
         """String for representing the Model object."""
         return f"{self.book.title} ({self.id})"
     
+    # Check for over due
+    @property
+    def is_overdue(self):
+        """Determines if the book is overdue based on due date and current date."""
+        return bool(self.due_back and date.today() > self.due_back)
+
+
     def display_title(self):
         """Display title of the book"""
         result = f"{self.book.title}"
@@ -133,7 +153,7 @@ class BookInstance(models.Model):
 
     def display_status(self):
         """Display status of each book instance"""
-        result = f"{self.LOAN_STATUS.get(self.status)}\n"
+        result = self.LOAN_STATUS
         return result
     display_status.short_description = "Status of the book"
 
@@ -191,3 +211,4 @@ class Language(models.Model):
                 violation_error_message="Language already exists (case insensitive match)"
             ),
         ]
+        ordering = ["name"]

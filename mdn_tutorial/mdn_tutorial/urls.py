@@ -16,13 +16,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+# Use include() to add paths from the catalog application
+from django.urls import include
 
+# Default admin template
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
-# Use include() to add paths from the catalog application
-from django.urls import include
+# Add Django site authentication urls (for login, logout, password management)
+# This is added after we have created groups and users using the
+# default template.
+urlpatterns += [
+    path('accounts/', include('django.contrib.auth.urls')),
+]
 
 urlpatterns += [
     path('book_catalog/', include('book_catalog.urls')),
@@ -41,5 +48,4 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
 
