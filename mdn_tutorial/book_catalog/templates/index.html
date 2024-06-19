@@ -8,6 +8,7 @@
 
   <p>
     Welcome to LocalLibrary, a website developed by
+    <em>Badger Underground with guidance from the Master </em>
     <em>Mozilla Developer Network</em>!
   </p>
 
@@ -27,4 +28,15 @@
       </ul>
     </li>
   </ul>
+  <!--Session cookie-->
+  <p>You have visited this page {{ num_visits }} time{{num_visits|pluralize }}.</p>
+
+  <p>
+    <h4>Surprises:</h4>
+    You will have a surprise <strong>{{ name_prize }}</strong>.
+    <br>
+    Keep visiting our Local Library at The End of The River.
+    <br>
+    Additional surprise: {{ prizes|random }}.
+  </p>
 {% endblock %}

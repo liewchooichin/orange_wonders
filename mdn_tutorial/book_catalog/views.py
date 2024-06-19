@@ -28,12 +28,27 @@ def index(request):
     #for i, book in enumerate(featured_book_list):
     #    featured_books += f"{book.title}, "
 
+    # Session cookie: Getting visit counts
+    num_visits = request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits + 1
+    # Surprise prizes to be given to visitors
+    prizes = ['Zesty blueberries', 'Mysterious blackberries', 'Exciting cherries', 'Wonderful strawberries', 'Amazing plums', 'Gracious grapes', 'Happy bananas', 'Forever papayas']
+    from random import random
+    import math
+    name_prize = prizes[math.floor(random()*len(prizes))]
+    request.session.get('name_prize', name_prize)
+    
+
+    # Context information to return
     context = {
         'num_books': num_books,
         'num_instances': num_instances,
         'num_instances_available': num_instances_available,
         'num_authors': num_authors,
         'num_genre': num_genre,
+        'num_visits': num_visits,
+        'name_prize': name_prize,
+        'prizes': prizes,
         'featured_books': featured_books,
         'title_of_page': "Local Library at The End of the River",
     }
