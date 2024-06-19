@@ -15,11 +15,14 @@
       {% for book in book_list %}
       <li>
         <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
-        ({{book.author}})
-        {# Test for the last item #}
-        {% if forloop.last %}
-          -- The End of the book list --
-        {% endif %}
+        (<a href="{{ book.author.get_absolute_url }}">{{ book.author }} </a>)
+      </li>
+      <li>
+        <!-- Test for the last item -->
+        <!-- With pagination, this will be the last item in every page. -->
+        {# if forloop.last #}
+        <!-- The End of the book list -->
+        {# endif #}
       </li>
       {% endfor %}
     </ul>
