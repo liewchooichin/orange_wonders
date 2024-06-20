@@ -15,5 +15,6 @@ urlpatterns = [
     path(route="mybooks/", view=views.LoanedBooksByUserListView.as_view(), name="my-borrowed"),
     path(route="allborrowed/", view=views.LoanedBooksAllListView.as_view(), name="allborrowed"),
     path(route="bookinstance/<int:pk>/renew/", view=views.renew_book_librarian, name="renew-book-librarian"),
+    
 ]
 

@@ -143,7 +143,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from book_catalog.forms import RenewBookForm
+from book_catalog.forms import RenewBookForm, RenewBookModelForm
 
 from django.contrib.auth.decorators import login_required, permission_required
 
@@ -156,13 +156,19 @@ def renew_book_librarian(request, pk):
     if request.method == 'POST':
 
         # Create a form instance and populate it with data from the request (binding):
+        # If using RenewBookForm instead of model form
         form = RenewBookForm(request.POST)
+        # Using model form
+        #form = RenewBookModelForm(request.POST)
 
         # Check if the form is valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required (here we just write it to the model due_back field)
+            # If using RenewBookForm instead of RenewBookModelForm
             book_instance.due_back = form.cleaned_data['renewal_date']
-            book_instance.save()
+            # If using RenewBookModelForm
+            #book_instance.due_back = form.cleaned_data['due_back']
+            #book_instance.save()
 
             # redirect to a new URL:
             return HttpResponseRedirect(reverse('allborrowed'))
@@ -170,7 +176,10 @@ def renew_book_librarian(request, pk):
     # If this is a GET (or any other method) create the default form.
     else:
         proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
+        # If the GET is called with RenewBookForm instead of the model form
         form = RenewBookForm(initial={'renewal_date': proposed_renewal_date})
+        # Call the GET with model form
+        #form = RenewBookModelForm(initial={'due_back': proposed_renewal_date})
 
     context = {
         'form': form,
