@@ -41,6 +41,7 @@ from django.forms import ModelForm
 
 from book_catalog.models import BookInstance
 
+# To renew books by staff
 class RenewBookModelForm(ModelForm):
     class Meta:
         model = BookInstance
@@ -62,3 +63,30 @@ class RenewBookModelForm(ModelForm):
 
        # Remember to always return the cleaned data.
        return data
+    
+# To create a book by staff
+# Check for unique ISBN
+# Need to use the objects:
+# Book.objects.all().count()
+# Sample:
+# b2 = Book.objects.values('isbn')
+# >>> b2[:3]
+# b2 = Book.objects.filter(isbn='9781786090631').get()
+# >>> b2
+# <Book: A room with a view>
+# b3 = Book.objects.get(isbn=1)
+# book_catalog.models.Book.DoesNotExist: Book matching query does not exist.
+from book_catalog.models import Book
+
+class CreateBookModelForm(ModelForm):
+    class Meta:
+        model = Book
+        fields = ['title', 'author', 'summary', 'isbn', 'genre', 'language']
+        help_texts = {'isbn': gettext_lazy('ISBN must be unique.')}
+        error_message = {'isbn': ('ISBN must be unique')}
+
+    def clean_isbn(self):
+        data = self.cleaned_data['isbn']
+
+        # How to get all the ISBN for comparison?
+        all_isbn = Book.isbn.all()

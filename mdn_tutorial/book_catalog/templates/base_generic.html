@@ -50,11 +50,13 @@
               <!--For staff librarian-->
               {% if user.is_staff %}
                 <li>Staff</li>
-                <li><a href="{% url 'allborrowed' %}">All borrowed books</a></li>
                 <!--         For testing
                   <li>Permissions: <p>{{ perms }}</p></li>
                   <li>Permissions: <p>{{ perms.book_catalog }}</p></li>
                 -->
+                <li><a href="{% url 'allborrowed' %}">All borrowed books</a></li>
+                <li><a href="{% url 'author-create' %}">Create author</a></li>
+                <li><a href="{% url 'book-create' %}">Create book</a></li>
                 {% endif %}
           
           <!--End of side bar nav-->

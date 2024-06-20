@@ -1,5 +1,9 @@
 {% extends "base_generic.html" %}
 
+{% block title %}
+      <title>Book detail</title>
+{% endblock %}
+
 {% block content %}
   <h1>Title: {{ book.title }}</h1>
 
@@ -31,4 +35,22 @@
       <p class="text-muted"><strong>Id of physical copy:</strong> {{ copy.id }}</p>
     {% endfor %}
   </div>
+{% endblock %}
+
+
+<!--For update book used by staff-->
+{% block sidebar %}
+  {{ block.super }}
+
+  {% if perms.book_catalog.change_book or perms.book_catalog.delete_book %}
+  <hr>
+  <ul class="sidebar-nav">
+    {% if perms.book_catalog.change_book %}
+      <li><a href="{% url 'book-update' book.id %}">Update book</a></li>
+    {% endif %}
+    {% if not book.bookinstance_set.all and perms.book_catalog.delete_author %}
+      <li><a href="{% url 'book-delete' book.id %}">Delete book</a></li>
+    {% endif %}
+    </ul>
+  {% endif %}
 {% endblock %}

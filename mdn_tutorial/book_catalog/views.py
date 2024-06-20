@@ -188,3 +188,76 @@ def renew_book_librarian(request, pk):
 
     return render(request, 'book_catalog/renew_book_librarian.html', context)
 
+# Generic edit views
+# Author: Create, update, delete
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from book_catalog.models import Author
+
+class AuthorCreate(PermissionRequiredMixin, CreateView):
+    model = Author
+    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+    initial = {'date_of_death': '11/11/2050'}
+    permission_required = (('book_catalog.add_author'), )
+
+class AuthorUpdate(PermissionRequiredMixin, UpdateView):
+    model = Author
+    # Not recommended (potential security issue if more fields added)
+    fields = '__all__'
+    permission_required = (('book_catalog.change_author'), )
+
+# Unfortunately deleting an Author will cause an exception if the author has an associated
+# book, because our Book model specifies on_delete=models.RESTRICT for the author 
+# ForeignKey field. To handle this case the view overrides the form_valid() method so that 
+# if deleting the Author succeeds it redirects to the success_url, but if not, it just 
+# redirects back to the same form. We'll update the template below to make clear that you 
+# can't delete an Author instance that is used in any Book.
+class AuthorDelete(PermissionRequiredMixin, DeleteView):
+    model = Author
+    success_url = reverse_lazy('authors')
+    permission_required = (('book_catalog.delete_author'), )
+
+    def form_valid(self, form):
+        try:
+            self.object.delete()
+            return HttpResponseRedirect(self.success_url)
+        except Exception as e:
+            return HttpResponseRedirect(
+                reverse("author-delete", kwargs={"pk": self.object.pk})
+            )
+
+# Adding in the generic edit views for Book
+from book_catalog.models import Book
+
+class BookCreate(PermissionRequiredMixin, CreateView):
+    model = Book
+    fields = ['title', 'author', 'summary', 
+              'isbn', 'genre', 'language']
+    # The language index number is used for language.
+    initial = {'language': 2}
+    permission_required = (('book_catalog.add_book'), )
+    # Check for unique ISBN
+    # Have not incorporated this
+
+
+class BookUpdate(PermissionRequiredMixin, UpdateView):
+    model = Book
+    fields = ['title', 'author', 'summary', 
+              'isbn', 'genre', 'language']
+    # The language index number is used for language.
+    permission_required = (('book_catalog.change_book'), )
+
+class BookDelete(PermissionRequiredMixin, DeleteView):
+    model = Book
+    success_url = reverse_lazy('books')
+    permission_required = (('book_catalog.delete_book'), )
+
+    def form_valid(self, form):
+        try:
+            self.object.delete()
+            return HttpResponseRedirect(self.success_url)
+        except Exception as e:
+            return HttpResponseRedirect(
+                reverse("book-delete", kwargs={"pk": self.object.pk})
+            )
+
