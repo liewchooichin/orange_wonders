@@ -88,5 +88,11 @@ class CreateBookModelForm(ModelForm):
     def clean_isbn(self):
         data = self.cleaned_data['isbn']
 
-        # How to get all the ISBN for comparison?
-        all_isbn = Book.isbn.all()
+        # Get all the ISBN for comparison
+        all_isbn = Book.objects.values('isbn')
+        print(f"Number of book instances: {len(all_isbn)}")
+        if data in all_isbn:
+            raise ValidationError(gettext_lazy('This ISBN exists in the copies of books. Use a unique ISBN.'))
+
+        # return the valid, unique isbn
+        return data

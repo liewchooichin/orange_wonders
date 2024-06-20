@@ -261,3 +261,48 @@ class BookDelete(PermissionRequiredMixin, DeleteView):
                 reverse("book-delete", kwargs={"pk": self.object.pk})
             )
 
+
+# Additional exercise:
+# Create a model form method to create a book
+# Only check for unique ISBN.
+# This is not working yet because create a book is not
+# like the renew book. In renew book, there is already
+# an instance in the database. But in create book,
+# there is no instance yet--the instance is yet to be
+# created.
+from book_catalog.forms import CreateBookModelForm
+
+@login_required
+@permission_required('book_catalog.add_book', raise_exception=True)
+def create_book_librarian(request):
+    book = get_object_or_404(Book)
+
+    # If this is a POST request then process the Form data
+    if request.method == 'POST':
+
+        # Create a form instance and populate it with data from the request (binding):
+        # Using model form
+        form = CreateBookModelForm(request.POST)
+
+        # Check if the form is valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required (here we just write it to the model due_back field)
+            # Using CreateBookModelForm
+            book.isbn = form.cleaned_data['isbn']
+            book.save()
+
+            # redirect to a new URL:
+            return HttpResponseRedirect(reverse('books'))
+
+    # If this is a GET (or any other method) create the default form.
+    else:
+        proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
+        # Call the GET with model form
+        form = CreateBookModelForm(initial={'language': 2})
+
+    context = {
+        'form': form,
+        'book': book,
+    }
+
+    return render(request, 'book_catalog/create_book_librarian.html', context)

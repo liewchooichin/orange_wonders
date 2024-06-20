@@ -1,0 +1,30 @@
+{% extends "base_generic.html" %}
+
+{% block title %}
+      <title>Create book</title>
+{% endblock %}
+
+{% block content %}
+  <h1>Create a new book</h1>
+ 
+  <form action="" method="post">
+    {% csrf_token %}
+    <table>
+    <!--The form can also be rendered as:-->
+    <!--{{ form.as_ul }}-->
+     <!--{{ form.as_p }}-->
+    {{ form.as_table }}
+    </table>
+    <input type="submit" value="Submit">
+  </form>
+
+    <p>My rendering using the template context. This can be used to 
+        finetuned the information of the form if needed.
+    </p>
+    <ul>
+        <li>The whole date field: {{ form.book.title.value }}</li>
+        <li>The list of errors: {{ form.book.isbn.errors }}</li>
+        <li>The id of the label: {{ form.book.isbn.id_for_label }}</li>
+        <li>The field help text: {{ form.book.isbn.help_text }}</li>
+    </ul>
+{% endblock %}
