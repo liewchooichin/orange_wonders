@@ -51,7 +51,9 @@
               {% if user.is_staff %}
                 <li>Staff</li>
                 <li><a href="{% url 'allborrowed' %}">All borrowed books</a></li>
-              {% endif %}
+                <li>Permissions: <p>{{ perms }}</p></li>
+                <li>Permissions: <p>{{ perms.book_catalog }}</p></li>
+                {% endif %}
           
           <!--End of side bar nav-->
           {% endblock %}

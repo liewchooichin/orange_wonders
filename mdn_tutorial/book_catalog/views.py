@@ -116,14 +116,17 @@ class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
 # To write a librarian view to maintain return books
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
-# Somehow the permission does not work
-#class LoanedBooksAllListView(PermissionRequiredMixin, generic.ListView):
-class LoanedBooksAllListView(LoginRequiredMixin, generic.ListView):
+# Librarian staff need both login and permissions.
+class LoanedBooksAllListView(LoginRequiredMixin, 
+                             PermissionRequiredMixin,
+                             generic.ListView):
     model = BookInstance    
     template_name = "book_catalog/borrowed_librarian.html"
     paginate_by = 5
-    #permission_required = ("book_catalog.can_mark_returned", "book_catalog.change_book")
-    #permission_required = "*"
+    permission_required = (
+        'book_catalog.change_bookinstance', 
+        'book_catalog.can_mark_returned')
+    
 
     def get_queryset(self) -> QuerySet[Any]:
         query_1 = BookInstance.objects.filter(status__exact="o")
