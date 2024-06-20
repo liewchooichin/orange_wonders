@@ -1,16 +1,23 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <h1>Book maintenance</h1>
+    <h1>All borrowed books</h1>
 
     {% if bookinstance_list %}
     <ul>
-
       {% for bookinst in bookinstance_list %}
       <!--If it is overdue, change the color.-->
       <li class="{% if bookinst.is_overdue %}text-danger{% endif %}">
+        <!--For library users-->
         <a href="{% url 'book-detail' bookinst.book.pk %}">{{ bookinst.book.title }}</a> 
-            ({{ bookinst.due_back }}) -- {{ bookinst.borrower }}
+            ({{ bookinst.due_back }}) 
+        <!--For library staff-->
+        {% if user.is_staff %} -- {{ bookinst.borrower }} {% endif %}
+        <!--Add renew-->
+        {% if perms.book_catalog.can_mark_returned %} 
+          <a href="{% url 'renew-book-librarian' bookinst.id %}">
+          -- Renew </a>
+        {% endif %}
       </li>
       {% endfor %}
     </ul>
