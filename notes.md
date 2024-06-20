@@ -103,3 +103,9 @@ Other templates that `extends` from the base template:
     - The variables are from render()--context=context.
     
 - Tags are enclosed in single braces with percentage signs ({% extends "base_generic.html" %}).
+
+## Python venv
+
+To activate the python environment created from venv:
+
+`source .venv/bin/activate`
