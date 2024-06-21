@@ -13,7 +13,7 @@ urlpatterns = [
     # The path can also be written like this:
     re_path(route=r'^books/(?P<pk>\d+)/$', view=views.BookDetailView.as_view(), name='book-detail'),
     path(route="authors/", view=views.AuthorListView.as_view(), name="authors"),
-    path(route="author/<int:pk>", view=views.AuthorDetailView.as_view(), name="author-detail"),
+    path(route="author/<int:pk>/", view=views.AuthorDetailView.as_view(), name="author-detail"),
     path(route="mybooks/", view=views.LoanedBooksByUserListView.as_view(), name="my-borrowed"),
     path(route="allborrowed/", view=views.LoanedBooksAllListView.as_view(), name="allborrowed"),
     path(route="bookinstance/<int:pk>/renew/", view=views.renew_book_librarian, name="renew-book-librarian"),
