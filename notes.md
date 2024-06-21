@@ -109,3 +109,9 @@ Other templates that `extends` from the base template:
 To activate the python environment created from venv:
 
 `source .venv/bin/activate`
+
+## What is `__init__.py`
+
+The `__init__.py` should be an empty file (this tells Python that the directory is a package).
+
+

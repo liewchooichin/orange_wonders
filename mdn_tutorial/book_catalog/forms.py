@@ -85,7 +85,7 @@ class CreateBookModelForm(ModelForm):
         help_texts = {'isbn': gettext_lazy('ISBN must be unique.')}
         error_message = {'isbn': ('ISBN must be unique')}
 
-    def clean_isbn(self):
+    def clean_data(self):
         data = self.cleaned_data['isbn']
 
         # Get all the ISBN for comparison
