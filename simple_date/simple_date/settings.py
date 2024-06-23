@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,13 +21,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-puvl@%emli2i@cbytkrueexelmy+#d^g#*r_w4(0jq%=-mv&1='
+#SECRET_KEY = 'django-insecure-puvl@%emli2i@cbytkrueexelmy+#d^g#*r_w4(0jq%=-mv&1='
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-&psk#na5l=p3q8_a+-$4w1f^lt3lx1c@d*p4x$ymm_rn7pwb87')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    os.environ.get('ALLOWED_HOSTS', 'http://localhost:8000'),
+]
 
+# Following the CSRF example for deployment to Azure
+CSRF_TRUSTED_ORIGINS = [
+        'https://*.azurewebsites.net',
+        'http://localhost:8000'
+    ]
+CORS_ALLOW_ALL_ORIGINS: True
 
 # Application definition
 
@@ -37,9 +48,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Following the example to deploy to Azure
+    'rest_framework',
+    'corsheaders',
+    # Follow by any app that I installed
 ]
 
+# Using example from deployment to Azure
+CORS_ORIGIN_ALLOW_ALL = True
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
