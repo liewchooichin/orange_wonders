@@ -16,7 +16,6 @@ def current_datetime(request):
 
 def hours_ahead(request, offset):
     offset = int(offset)
-    assert False
     dt = datetime.now() + timedelta(hours=offset)
     html = f"<html><body>In {offset} hour(s), it will be {dt}.</body></html>"
     return HttpResponse(html)

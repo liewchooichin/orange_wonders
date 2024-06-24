@@ -21,14 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'django-insecure-s%qcxw+fra0aus%5-923z@#%w*^8afe7)8(f$^-n2^6^w=lxoz'
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = 'django-insecure-s%qcxw+fra0aus%5-923z@#%w*^8afe7)8(f$^-n2^6^w=lxoz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ["http://localhost:8000"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -50,8 +48,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # Whitenoise must be just after the SecurityMiddleware
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     # Manages sessions across requests
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -133,18 +129,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-# The absolute path to the directory where collectstatic will 
-# collect static files for deployment.
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-STATICFILES_DIRS = [
-    #BASE_DIR / "static",
-    "book_catalog/static/",
-]
-
-# The URL to use when referring to static files (where 
-# they will be served from)
-#STATIC_URL = 'static/' # original line, without the beginning /
 STATIC_URL = 'static/'
 
 # Default primary key field type
@@ -159,12 +143,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #  by default.
 # The homepage that we defined above is the book_catalog page.
 LOGIN_REDIRECT_URL = '/'
-
-# Static file serving.
-# https://whitenoise.readthedocs.io/en/stable/django.html#add-compression-and-caching-support
-STORAGES = {
-    # ...
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}

@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+# Only for local .env and DEBUG=True
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,16 +25,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'django-insecure-puvl@%emli2i@cbytkrueexelmy+#d^g#*r_w4(0jq%=-mv&1='
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-&psk#na5l=p3q8_a+-$4w1f^lt3lx1c@d*p4x$ymm_rn7pwb87')
+SECRET_KEY = 'django-insecure-puvl@%emli2i@cbytkrueexelmy+#d^g#*r_w4(0jq%=-mv&1='
+#SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
-DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+DEBUG = True if (os.getenv('DJANGO_DEBUG')=='False') else False
 
-ALLOWED_HOSTS = [
-    os.environ.get('ALLOWED_HOSTS', 'http://localhost:8000'),
-]
+ #os.environ.get('ALLOWED_HOSTS', '),
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',') #["http://localhost:8000"]
 
 # Following the CSRF example for deployment to Azure
 CSRF_TRUSTED_ORIGINS = [
